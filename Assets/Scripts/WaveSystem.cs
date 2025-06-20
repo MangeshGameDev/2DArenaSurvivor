@@ -3,11 +3,13 @@ using UnityEngine;
 public class WaveSystem : MonoBehaviour
 {
     public SpawnManager spawnManager;
-    public int waveNumber = 0; // Current wave number
-    public int enemiesPerWave = 5; // Number of enemies to spawn per wave
-    public float timeBetweenWaves = 5f; // Time between waves
-    private float waveTimer = 1f;
-    private string enemyTag = "Enemy"; // Tag for enemy pool
+    public int waveNumber = 0;
+    public int enemiesPerWave = 5;
+    public float timeBetweenWaves = 5f;
+    private float waveTimer = 0f;
+    private string enemyTag = "Enemy";
+    private int enemyCount = 0;
+    private bool waitingForNextWave = false;
 
     void Start()
     {
@@ -17,11 +19,12 @@ public class WaveSystem : MonoBehaviour
 
     void Update()
     {
-        if (waveTimer > 0)
+        if (waitingForNextWave)
         {
             waveTimer -= Time.deltaTime;
             if (waveTimer <= 0)
             {
+                waitingForNextWave = false;
                 StartNextWave();
             }
         }
@@ -30,14 +33,23 @@ public class WaveSystem : MonoBehaviour
     void StartNextWave()
     {
         waveNumber++;
-        int enemiesToSpawn = enemiesPerWave + (waveNumber - 1) * 2; // Increase difficulty by 2 enemies per wave
+        enemyCount = enemiesPerWave + (waveNumber - 1) * 2;
 
-        for (int i = 0; i < enemiesToSpawn; i++)
+        for (int i = 0; i < enemyCount; i++)
         {
             Vector2 spawnPosition = new Vector2(Random.Range(-10, 10), Random.Range(-10, 10));
             spawnManager.SpawnFromPool(enemyTag, spawnPosition);
         }
+    }
 
-        waveTimer = timeBetweenWaves;
+    // Call this from your enemy script when an enemy dies
+    public void OnEnemyDied()
+    {
+        enemyCount--;
+        if (enemyCount <= 0)
+        {
+            waveTimer = timeBetweenWaves;
+            waitingForNextWave = true;
+        }
     }
 }

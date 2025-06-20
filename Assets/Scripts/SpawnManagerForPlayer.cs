@@ -43,12 +43,12 @@ public class SpawnManagerForPlayer : MonoBehaviour
     {
         if (wantToSpawn == true)
         {
-            SpawnFromPool("Bullet"); // Example usage of spawning an object from the pool
+            SpawnFromPool("Bullet",transform.position); // Example usage of spawning an object from the pool
             wantToSpawn = false; // Reset the flag after spawning
         }
     }
 
-    public void SpawnFromPool(string tag)
+    public void SpawnFromPool(string tag, Vector2 position )
     {
         if (!poolDictionary.ContainsKey(tag))
         {
@@ -57,7 +57,7 @@ public class SpawnManagerForPlayer : MonoBehaviour
         }
         GameObject objectToSpawn = poolDictionary[tag].Dequeue();// Get an object from the pool
         objectToSpawn.SetActive(true);
-        objectToSpawn.transform.position = Vector2.zero;
+        objectToSpawn.transform.position = position;
         objectToSpawn.transform.rotation = Quaternion.identity;
         poolDictionary[tag].Enqueue(objectToSpawn); // Re-add the object to the pool
     }

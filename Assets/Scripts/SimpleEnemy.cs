@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class SimpleEnemy : MonoBehaviour
 {
+    
     private GameObject playerGameObject;
     private PlayerController playerController;
     [Header("Enemy Settings")]
@@ -21,6 +22,7 @@ public class SimpleEnemy : MonoBehaviour
     private float lastAttackTime = -Mathf.Infinity; // Track last attack time
 
     private SpawnManager spawnManager; // Reference to the SpawnManager
+    private WaveSystem waveSystem; // Reference to the WaveSystem
     private void Awake()
     {
         // Initialize health and health bar
@@ -30,6 +32,7 @@ public class SimpleEnemy : MonoBehaviour
         playerGameObject = GameObject.FindGameObjectWithTag("Player");
         playerController = playerGameObject.GetComponent<PlayerController>();
         spawnManager = GameObject.FindFirstObjectByType<SpawnManager>(); // Find the SpawnManager in the scene
+        waveSystem = GameObject.FindFirstObjectByType<WaveSystem>(); // Find the WaveSystem in the scene
     }
 
     void Update()
@@ -83,8 +86,8 @@ public class SimpleEnemy : MonoBehaviour
     }
     public void Die()
     {
-        Debug.Log("Enemy has died!");
-       spawnManager.DeactivatePooledObject(gameObject); // Deactivate the enemy object instead of destroying it
+        waveSystem.OnEnemyDied(); // Notify the WaveSystem that an enemy has died
+        spawnManager.DeactivatePooledObject(gameObject); // Deactivate the enemy object instead of destroying it
         currentHealth = maxHealth; // Reset health for next spawn
         healthBarCanvas.SetActive(false); // Hide health bar canvas when enemy dies
     }

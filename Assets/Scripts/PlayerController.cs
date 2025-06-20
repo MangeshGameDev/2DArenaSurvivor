@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     [Header("Player Attack Settings")]
     public float attackRange = 100f;
     public LayerMask enemyLayer;
-    private float attackCooldown = 1f;
+    private float attackCooldown = 0.5f;
     private float lastAttackTime = -Mathf.Infinity;
 
     private SpawnManagerForPlayer spawnManagerForPlayer; // Reference to the SpawnManager for player
@@ -29,12 +29,14 @@ public class PlayerController : MonoBehaviour
         currentHealth = maxHealth;
         playerSlider.maxValue = maxHealth;
         playerSlider.value = currentHealth;
+       
     }
 
     private void Update()
     {
         Movement();
         AutoAttack();
+
     }
 
     public void Movement()
@@ -55,10 +57,8 @@ public class PlayerController : MonoBehaviour
 
     public void Attack()
     {
-        if (Time.time - lastAttackTime >= attackCooldown)
-        {
-            spawnManagerForPlayer.SpawnFromPool("Bullet"); // Spawn a bullet from the pool
-        }
+        spawnManagerForPlayer.SpawnFromPool("Bullet", transform.position); // Spawn a bullet from the pool
+
     }
 
     public void UpdateHealth(float amount)
@@ -74,6 +74,11 @@ public class PlayerController : MonoBehaviour
 
     private void AutoAttack()
     {
-        
+        if (Time.time - lastAttackTime >= attackCooldown)
+        {
+            Attack();
+            lastAttackTime = Time.time; // Update the last attack time
+        }
+          
     }
 }
