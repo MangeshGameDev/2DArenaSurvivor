@@ -56,23 +56,7 @@ public class PlayerController : MonoBehaviour
 
     public void Attack(GameObject target)
     {
-        Debug.Log("Player is throwing a projectile!");
-
-        if (throwablePrefab != null && target != null)
-        {
-            // Instantiate projectile at player's position
-            GameObject projectile = Instantiate(throwablePrefab, transform.position, Quaternion.identity);
-
-            // Calculate direction to target
-            Vector3 direction = (target.transform.position - transform.position).normalized;
-
-            // Apply force to projectile
-            Rigidbody rb = projectile.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.AddForce(direction * throwForce, ForceMode.VelocityChange);
-            }
-        }
+       
     }
 
     public void UpdateHealth(float amount)
@@ -88,30 +72,6 @@ public class PlayerController : MonoBehaviour
 
     private void AutoAttack()
     {
-        if (Time.time - lastAttackTime < attackCooldown)
-            return;
-
-        Collider[] hitEnemies = Physics.OverlapSphere(transform.position, attackRange, enemyLayer);
-        if (hitEnemies.Length > 0)
-        {
-            // Find the closest enemy
-            GameObject closestEnemy = null;
-            float minDist = Mathf.Infinity;
-            foreach (var enemy in hitEnemies)
-            {
-                float dist = (enemy.transform.position - transform.position).sqrMagnitude;
-                if (dist < minDist)
-                {
-                    minDist = dist;
-                    closestEnemy = enemy.gameObject;
-                }
-            }
-
-            if (closestEnemy != null)
-            {
-                Attack(closestEnemy);
-                lastAttackTime = Time.time;
-            }
-        }
+        
     }
 }
