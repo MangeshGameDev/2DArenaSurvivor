@@ -17,12 +17,11 @@ public class PlayerController : MonoBehaviour
     private float attackCooldown = 1f;
     private float lastAttackTime = -Mathf.Infinity;
 
-    [Header("Throwable Settings")]
-    public GameObject throwablePrefab; // Assign your projectile prefab in the Inspector
-    public float throwForce = 10f;
+    private SpawnManagerForPlayer spawnManagerForPlayer; // Reference to the SpawnManager for player
 
     private void Awake()
     {
+        spawnManagerForPlayer = GameObject.FindFirstObjectByType<SpawnManagerForPlayer>(); // Find the SpawnManagerForPlayer in the scene
     }
 
     private void Start()
@@ -54,9 +53,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void Attack(GameObject target)
+    public void Attack()
     {
-       
+        if (Time.time - lastAttackTime >= attackCooldown)
+        {
+            spawnManagerForPlayer.SpawnFromPool("Bullet"); // Spawn a bullet from the pool
+        }
     }
 
     public void UpdateHealth(float amount)

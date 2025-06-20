@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SimpleEnemy : MonoBehaviour
 {
@@ -13,20 +14,28 @@ public class SimpleEnemy : MonoBehaviour
     private float attackpower = 10f;
     [Header("Enemy Health Settings")]
     private float maxHealth = 100f;
-    private float currentHealth;
-
+    public float currentHealth;
+    public GameObject healthBarCanvas;
+    public Slider healthBarSlider; // Slider to represent health visually
 
     private float lastAttackTime = -Mathf.Infinity; // Track last attack time
 
+    private SpawnManager spawnManager; // Reference to the SpawnManager
     private void Awake()
     {
+        // Initialize health and health bar
+        currentHealth = maxHealth;
+        healthBarSlider.maxValue = maxHealth;
+        healthBarCanvas.SetActive(false); // Hide health bar canvas initially
         playerGameObject = GameObject.FindGameObjectWithTag("Player");
         playerController = playerGameObject.GetComponent<PlayerController>();
+        spawnManager = GameObject.FindFirstObjectByType<SpawnManager>(); // Find the SpawnManager in the scene
     }
 
     void Update()
     {
         StateMachine();
+       
     }
     
     public void StateMachine()
@@ -44,7 +53,7 @@ public class SimpleEnemy : MonoBehaviour
     
     private void ChasePlayer()
     {
-        Debug.Log("Chasing the playerGameObject...");
+      //  Debug.Log("Chasing the playerGameObject...");
         transform.position = Vector3.MoveTowards(transform.position, playerGameObject.transform.position, moveSpeed * Time.deltaTime);
     }
 
@@ -54,24 +63,38 @@ public class SimpleEnemy : MonoBehaviour
         {
             playerController.UpdateHealth(-attackpower);
             lastAttackTime = Time.time;
-            Debug.Log("Enemy attacked the player!");
+          //  Debug.Log("Enemy attacked the player!");
         }
     }
 
     public void TakeDamage(float damage)
     {
+       
         currentHealth -= damage;
-        Debug.Log($"Enemy took {damage} damage! Current health: {currentHealth}");
+       
         
         if (currentHealth <= 0)
         {
             Die();
         }
+        // Update health bar
+        healthBarSlider.value = currentHealth;
+        healthBarCanvas.SetActive(true); // Show health bar canvas when taking damage
     }
     public void Die()
     {
         Debug.Log("Enemy has died!");
-        Destroy(gameObject); // Destroy the enemy GameObject
+       spawnManager.DeactivatePooledObject(gameObject); // Deactivate the enemy object instead of destroying it
+        currentHealth = maxHealth; // Reset health for next spawn
+        healthBarCanvas.SetActive(false); // Hide health bar canvas when enemy dies
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Bullet"))
+        {
+            Debug.Log(other.name + " hit the enemy!");
+        }
+        
+    }
 }

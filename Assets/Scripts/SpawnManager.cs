@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnManagerForPlayer : MonoBehaviour
+public class SpawnManager : MonoBehaviour
 {
     public bool wantToSpawn;
+
     [System.Serializable]
     public class Pool
     {
@@ -18,13 +19,18 @@ public class SpawnManagerForPlayer : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        ObjectPoolingStart();
+    }
+
+    private void ObjectPoolingStart()
+    {
         poolDictionary = new Dictionary<string, Queue<GameObject>>();// Initialize the dictionary to hold the object pools
         foreach (Pool pool in pools)
         {
             Queue<GameObject> objectPool = new Queue<GameObject>();// Create a new queue for each pool
             for (int i = 0; i < pool.size; i++)
             {
-                GameObject obj = Instantiate(pool.prefab);
+                GameObject obj = Instantiate(pool.prefab, this.transform); // Set parent to SpawnManager
                 obj.SetActive(false);
                 objectPool.Enqueue(obj);
             }
@@ -35,17 +41,10 @@ public class SpawnManagerForPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (wantToSpawn == true)
-        {
-            Vector3 spawnPos = Vector3.zero;
-            spawnPos.x = Random.Range(-10, 10); // Randomly set the x position within a range
-            spawnPos.y = Random.Range(-10, 10); // Randomly set the y position within a range
-            SpawnFromPool("Enemy", spawnPos, Quaternion.identity); // Example usage of spawning an object from the pool
-            wantToSpawn = false; // Reset the flag after spawning
-        }
+       
     }
 
-    public void SpawnFromPool(string tag, Vector2 position, Quaternion rotation)
+    public void SpawnFromPool(string tag,Vector2 position)
     {
         if (!poolDictionary.ContainsKey(tag))
         {
@@ -55,7 +54,12 @@ public class SpawnManagerForPlayer : MonoBehaviour
         GameObject objectToSpawn = poolDictionary[tag].Dequeue();// Get an object from the pool
         objectToSpawn.SetActive(true);
         objectToSpawn.transform.position = position;
-        objectToSpawn.transform.rotation = rotation;
+        objectToSpawn.transform.rotation = Quaternion.identity;
         poolDictionary[tag].Enqueue(objectToSpawn); // Re-add the object to the pool
+    }
+
+    public void DeactivatePooledObject(GameObject obj)
+    {
+        obj.SetActive(false);
     }
 }
