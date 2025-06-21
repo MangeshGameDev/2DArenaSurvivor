@@ -90,6 +90,8 @@ public class SimpleEnemy : MonoBehaviour
         spawnManager.DeactivatePooledObject(gameObject); // Deactivate the enemy object instead of destroying it
         currentHealth = maxHealth; // Reset health for next spawn
         healthBarCanvas.SetActive(false); // Hide health bar canvas when enemy dies
+        spawnManager.SpawnFromPool("ExpCoin", transform.position); // Spawn an experience coin at the enemy's position
+
     }
 
     private void OnTriggerEnter(Collider other)

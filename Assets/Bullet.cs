@@ -6,7 +6,7 @@ public class Bullet : MonoBehaviour
     [Header("Bullet Settings")]
     public float speed = 10f; // Speed of the bullet
     public float lifetime = 5f; // Time before the bullet is destroyed
-    private float damage = 100f; // Damage dealt by the bullet
+    public float damage = 50f; // Damage dealt by the bullet
     [HideInInspector] public Vector2 direction; // Direction of the bullet
     private string targetTag = "Enemy"; // Tag to seek
     private SpawnManagerForPlayer spawnManagerForPlayer; // Reference to the SpawnManager for player
@@ -64,7 +64,12 @@ public class Bullet : MonoBehaviour
     public void SeekAndSetTarget()
     {
         hasTarget = false;
-        if (playerController == null) return;
+        if (playerController == null)
+        {
+            spawnManagerForPlayer.DeactivatePooledObject(gameObject);
+            gameObject.SetActive(false);
+            return;
+        }
 
         Vector2 currentPos = transform.position;
         float attackRange = playerController.attackRange;
@@ -92,10 +97,9 @@ public class Bullet : MonoBehaviour
         }
         else
         {
-            // Move in a random direction if no enemy is found in range
-            float angle = Random.Range(0f, 2f * Mathf.PI);
-            direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)).normalized;
-            hasTarget = false;
+            // No target found, deactivate bullet immediately
+            spawnManagerForPlayer.DeactivatePooledObject(gameObject);
+            gameObject.SetActive(false);
         }
     }
 

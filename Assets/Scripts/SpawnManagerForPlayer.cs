@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class SpawnManagerForPlayer : MonoBehaviour
 {
-    public bool wantToSpawn;
+  
    
     [System.Serializable]
     public class Pool
@@ -41,11 +41,7 @@ public class SpawnManagerForPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (wantToSpawn == true)
-        {
-            SpawnFromPool("Bullet",transform.position); // Example usage of spawning an object from the pool
-            wantToSpawn = false; // Reset the flag after spawning
-        }
+       
     }
 
     public void SpawnFromPool(string tag, Vector2 position )
