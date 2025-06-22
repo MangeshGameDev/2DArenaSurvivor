@@ -5,12 +5,15 @@ using UnityEngine;
 
 public class UpgradeManager : MonoBehaviour
 {
-    private PlayerController playerController; // Reference to the PlayerController script
+    public static UpgradeManager instance; // Singleton instance
+    public PlayerController playerController; // Reference to the PlayerController script
     public GameObject upgradePanelUiGameObject; // Reference to the upgrade panel UI GameObject
 
-    private Bullet bulletCS;
+   
     [Header("Bullet Upgrade Settings")]
-    public float bulletUpgradeRate = 10f; // Cost to upgrade the bullet
+    public float bulletDamage = 50f; // Initial bullet damage
+    public float bulletDamageUpgradeRate = 5f; // Cost to upgrade the bullet
+    public float bulletRangeUpgradeRate = 0.25f; // Cost to upgrade the bullet range
     public TextMeshProUGUI bulletDamageText;
     public TextMeshProUGUI bulletRangeText;
 
@@ -21,11 +24,16 @@ public class UpgradeManager : MonoBehaviour
     public float circleUpgradeRate = 1f; // Cost to upgrade the circle
     public TextMeshProUGUI circleDamageText;
     public TextMeshProUGUI circleRadiusText;
+    
 
     void Awake()
     {
-        playerController = GameObject.FindFirstObjectByType<PlayerController>(); 
-        bulletCS = GameObject.FindFirstObjectByType<Bullet>(); 
+
+        if(instance == null)
+        {
+            instance = this; // Set the singleton instance
+        }
+       
     }
     void Start()
     {
@@ -39,7 +47,8 @@ public class UpgradeManager : MonoBehaviour
     }
     public void BulletUpgrade()
     {
-        bulletCS.damage += bulletUpgradeRate;
+        bulletDamage += bulletDamageUpgradeRate;
+        playerController.attackRange += bulletRangeUpgradeRate ; // Assuming attackRange is the range of the bullets
         DisableUIPanel();
 
 
@@ -63,7 +72,8 @@ public class UpgradeManager : MonoBehaviour
     }
     private void UpdateBulletUI()
     {
-        bulletDamageText.text = "Bullet Damage: " + bulletCS.damage.ToString("F1");
+       
+        bulletDamageText.text = "Bullet Damage: " + bulletDamage.ToString("F1");
         bulletRangeText.text = "Bullet Range: " + playerController.attackRange.ToString("F1"); // Assuming lifetime is the range
     }
     private void UpdateCircleUI()

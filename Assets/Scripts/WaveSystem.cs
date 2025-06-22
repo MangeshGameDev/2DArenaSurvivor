@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class WaveSystem : MonoBehaviour
 {
+    public static WaveSystem Instance;
     public SpawnManager spawnManager;
     public int waveNumber = 0;
     public int enemiesPerWave = 5;
@@ -11,6 +12,17 @@ public class WaveSystem : MonoBehaviour
     private int enemyCount = 0;
     private bool waitingForNextWave = false;
 
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this; // Set the singleton instance
+        }
+        else
+        {
+            Destroy(gameObject); // Ensure only one instance exists
+        }
+    }
     void Start()
     {
         spawnManager = GetComponent<SpawnManager>();

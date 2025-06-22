@@ -1711,7 +1711,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 567afcac7b2067d4783cb7469d8456d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wantToSpawn: 0
   pools:
   - tag: Enemy
     prefab: {fileID: 738805946861741838, guid: d6150bfc872d1bb47ae25eb2b59b6339, type: 3}
@@ -1921,8 +1920,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -144}
-  m_SizeDelta: {x: 592.7362, y: 50}
+  m_AnchoredPosition: {x: 35, y: -144}
+  m_SizeDelta: {x: 825.84, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1450274645
 MonoBehaviour:
@@ -1944,7 +1943,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Power : 10
+  m_text: 'Bullet Damage: 50.0
 
 
 '
@@ -1974,8 +1973,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 120
-  m_fontSizeBase: 120
+  m_fontSize: 90
+  m_fontSizeBase: 90
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2578,7 +2577,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1660012903}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2125693823}
+        m_TargetAssemblyTypeName: UpgradeManager, Assembly-CSharp
+        m_MethodName: BulletUpgrade
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1688093697
 GameObject:
   m_ObjectHideFlags: 0
@@ -3025,8 +3036,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -268}
-  m_SizeDelta: {x: 592.7362, y: 50}
+  m_AnchoredPosition: {x: 38.9, y: -268}
+  m_SizeDelta: {x: 833.64, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1882932052
 MonoBehaviour:
@@ -3048,8 +3059,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Range : 5
-
+  m_text: 'Bullet Damage: 50.0
 
 '
   m_isRightToLeft: 0
@@ -3078,8 +3088,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 120
-  m_fontSizeBase: 120
+  m_fontSize: 90
+  m_fontSizeBase: 90
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3787,13 +3797,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25cfde054b5c34742ba8d96107dcded1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerController: {fileID: 1688093699}
   upgradePanelUiGameObject: {fileID: 344908396}
-  bulletUpgradeRate: 10
+  bulletDamage: 50
+  bulletDamageUpgradeRate: 5
+  bulletRangeUpgradeRate: 0.25
   bulletDamageText: {fileID: 1450274645}
   bulletRangeText: {fileID: 1882932052}
   circleUpgradeRate: 10
-  circleDamageText: {fileID: 0}
-  circleRadiusText: {fileID: 0}
+  circleDamageText: {fileID: 571428255}
+  circleRadiusText: {fileID: 33248539}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

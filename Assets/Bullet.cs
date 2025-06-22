@@ -3,12 +3,14 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    private UpgradeManager upgradeManager; // Reference to the UpgradeManager script
+
     [Header("Bullet Settings")]
     public float speed = 10f; // Speed of the bullet
     public float lifetime = 5f; // Time before the bullet is destroyed
     public float damage = 50f; // Damage dealt by the bullet
     [HideInInspector] public Vector2 direction; // Direction of the bullet
-    private string targetTag = "Enemy"; // Tag to seek
+   
     private SpawnManagerForPlayer spawnManagerForPlayer; // Reference to the SpawnManager for player
     private PlayerController playerController; // Reference to the PlayerController
 
@@ -17,16 +19,24 @@ public class Bullet : MonoBehaviour
 
     private void Awake()
     {
-        spawnManagerForPlayer = GameObject.FindFirstObjectByType<SpawnManagerForPlayer>();
-        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        upgradeManager  = UpgradeManager.instance; // Get the UpgradeManager instance
+        spawnManagerForPlayer = SpawnManagerForPlayer.Instance; // Get the SpawnManagerForPlayer instance
+        playerController = PlayerController.instance; // Get the PlayerController instance
     }
 
     private void OnEnable()
     {
+       
         SeekAndSetTarget();
     }
 
     private void Update()
+    {
+        ShootWhenGotTarget();
+        damage = upgradeManager.bulletDamage; // Update bullet damage from UpgradeManager
+    }
+
+    private void ShootWhenGotTarget()
     {
         if (hasTarget)
         {

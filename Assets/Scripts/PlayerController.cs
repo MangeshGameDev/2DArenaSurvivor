@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController instance; // Singleton instance for easy access
     private float moveSpeed = 5f;
     private float sprintSpeed = 10f;
 
@@ -26,12 +27,23 @@ public class PlayerController : MonoBehaviour
     private UpgradeManager upgradeManager; // Reference to the UpgradeManager script
     private void Awake()
     {
-        spawnManagerForPlayer = GameObject.FindFirstObjectByType<SpawnManagerForPlayer>(); // Find the SpawnManagerForPlayer in the scene
-        upgradeManager = GameObject.FindFirstObjectByType<UpgradeManager>(); // Find the UpgradeManager in the scene
+        spawnManagerForPlayer = SpawnManagerForPlayer.Instance; // Find the SpawnManagerForPlayer in the scene
+        upgradeManager = UpgradeManager.instance; 
     }
 
+   
     private void Start()
     {
+        #region Singleton Pattern
+        if (instance == null)
+        {
+            instance = this; // Set the singleton instance
+        }
+        else
+        {
+            Destroy(gameObject); // Ensure only one instance exists
+        }
+       #endregion
         // Initialize health and health bar
         currentHealth = maxHealth;
         playerSlider.maxValue = maxHealth;
@@ -68,7 +80,7 @@ public class PlayerController : MonoBehaviour
 
     public void Attack()
     {
-        spawnManagerForPlayer.SpawnFromPool("Bullet", transform.position); // Spawn a bullet from the pool
+        spawnManagerForPlayer.SpawnFromPool("Bullet", transform.position); // Spawn a bullet from the pools
 
     }
 

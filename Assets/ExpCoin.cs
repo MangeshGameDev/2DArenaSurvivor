@@ -9,7 +9,7 @@ public class ExpCoin : MonoBehaviour
     void Start()
     {
         playerController = GameObject.FindFirstObjectByType<PlayerController>(); // Find the PlayerController in the scene
-        spawnManager = GameObject.FindFirstObjectByType<SpawnManager>(); // Find the SpawnManager in the scene
+        spawnManager = SpawnManager.Instance; // Find the SpawnManager in the scene
     }
 
     // Update is called once per frame
