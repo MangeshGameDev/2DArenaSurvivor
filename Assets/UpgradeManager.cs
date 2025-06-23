@@ -73,8 +73,8 @@ public class UpgradeManager : MonoBehaviour
     private void UpdateBulletUI()
     {
        
-        bulletDamageText.text = "Bullet Damage: " + bulletDamage.ToString("F1");
-        bulletRangeText.text = "Bullet Range: " + playerController.attackRange.ToString("F1"); // Assuming lifetime is the range
+        bulletDamageText.text = "Bullet Damage: " + bulletDamage.ToString();
+        bulletRangeText.text = "Bullet Range: " + playerController.attackRange.ToString(); // Assuming lifetime is the range
     }
     private void UpdateCircleUI()
     {

@@ -23,12 +23,12 @@ public class PlayerController : MonoBehaviour
     private float attackCooldown = 0.5f;
     private float lastAttackTime = -Mathf.Infinity;
 
-    private SpawnManagerForPlayer spawnManagerForPlayer; // Reference to the SpawnManager for player
-    private UpgradeManager upgradeManager; // Reference to the UpgradeManager script
+    public SpawnManagerForPlayer spawnManagerForPlayer; // Reference to the SpawnManager for player
+    public UpgradeManager upgradeManager; // Reference to the UpgradeManager script
     private void Awake()
     {
-        spawnManagerForPlayer = SpawnManagerForPlayer.Instance; // Find the SpawnManagerForPlayer in the scene
-        upgradeManager = UpgradeManager.instance; 
+        
+       
     }
 
    

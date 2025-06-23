@@ -30,7 +30,7 @@ public class SimpleEnemy : MonoBehaviour
         healthBarSlider.maxValue = maxHealth;
         healthBarCanvas.SetActive(false); // Hide health bar canvas initially
         playerGameObject = GameObject.FindGameObjectWithTag("Player");
-        playerController = PlayerController.instance; // Get the PlayerController instance
+        playerController = playerGameObject.GetComponent<PlayerController>();
         spawnManager = SpawnManager.Instance; // Get the SpawnManager instance
         waveSystem = WaveSystem.Instance;
     }
