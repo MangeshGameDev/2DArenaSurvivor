@@ -21,7 +21,9 @@ public class UpgradeManager : MonoBehaviour
     private float healUpgradeRate = 100f; // Cost to upgrade the heal
 
     [Header("Cricle Upgrade Settings")]
-    public float circleUpgradeRate = 1f; // Cost to upgrade the circle
+    public CircleAttack circleAttack; // Reference to the CircleAttack component
+    public float circleDamageUpgradeRate = 2f; // Cost to upgrade the circle
+    public float circleRangeUpgradeRate = 0.25f; // Cost to upgrade the circle attack range
     public TextMeshProUGUI circleDamageText;
     public TextMeshProUGUI circleRadiusText;
     
@@ -58,6 +60,15 @@ public class UpgradeManager : MonoBehaviour
         playerController.UpdateHealth(healUpgradeRate);
         DisableUIPanel();
     }
+    public void CircleUpgrade()
+    {
+        if (circleAttack != null)
+        {
+            circleAttack.IncreaseVisualScale(circleRangeUpgradeRate); // Increase the visual scale of the circle
+            circleAttack.ChangeAttackPower(circleDamageUpgradeRate); // Increase the actual attack range
+        }
+        DisableUIPanel();
+    }
     public void EnableUIPanel()
     {
         Time.timeScale = 0f; // Pause the game
@@ -78,6 +89,7 @@ public class UpgradeManager : MonoBehaviour
     }
     private void UpdateCircleUI()
     {
-       
+       circleDamageText.text = "Damage: " + circleAttack.attackPower.ToString();
+       circleRadiusText.text = "Radius: " + circleAttack.transform.localScale.x.ToString(); // Assuming the circle's radius is represented by its scale
     }
 }
