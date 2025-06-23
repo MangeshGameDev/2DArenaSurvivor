@@ -2,36 +2,39 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
-{
-    public static PlayerController instance; // Singleton instance for easy access
+{  
+    public static PlayerController instance;
+    // Player Movement Settings
     private float moveSpeed = 5f;
     private float sprintSpeed = 10f;
 
-    [Header("Player Health Settings")]
+   //Player Health Settings
     private float maxHealth = 100f;
     public float currentHealth;
     public Slider playerSlider;
-    [Header("Player Exp Settings")]
+
+    //"Player Exp Settings"
     public float maxExp = 100f;
     public float currentExp = 0f;
-    public Slider expSlider; // Slider to represent experience visually
+    public Slider expSlider; 
 
 
-    [Header("Player Attack Settings")]
+    //"Player Attack Settings"
     public float attackRange = 5f;
     public LayerMask enemyLayer;
     private float attackCooldown = 0.5f;
     private float lastAttackTime = -Mathf.Infinity;
 
-    public SpawnManagerForPlayer spawnManagerForPlayer; // Reference to the SpawnManager for player
-    public UpgradeManager upgradeManager; // Reference to the UpgradeManager script
+    // References to other managers
+    public SpawnManagerForPlayer spawnManagerForPlayer; 
+    public UpgradeManager upgradeManager;
+
+    // bool to check if the player is dead
+   [HideInInspector] public bool isDead = false;
     private void Awake()
     {
-        
-       
+       Time.timeScale = 1f; // Ensure the game is running at normal speed
     }
-
-   
     private void Start()
     {
         #region Singleton Pattern
@@ -51,8 +54,10 @@ public class PlayerController : MonoBehaviour
         // Initialize experience and experience bar
         expSlider.maxValue = maxExp;
         expSlider.value = currentExp;
+        // Initialize references to other managers
 
-
+        // boolean to check if the player is dead
+        isDead = false;
     }
 
     private void Update()
@@ -60,6 +65,8 @@ public class PlayerController : MonoBehaviour
         Movement();
         AutoAttack();
         UpgradeWeapon();
+        die(); 
+
     }
 
     public void Movement()
@@ -81,7 +88,6 @@ public class PlayerController : MonoBehaviour
     public void Attack()
     {
         spawnManagerForPlayer.SpawnFromPool("Bullet", transform.position); // Spawn a bullet from the pools
-
     }
 
     public void UpdateHealth(float amount)
@@ -104,6 +110,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void UpdateMaxExp()
+    {
+        maxExp += WaveSystem.Instance.waveNumber * 2; // Increase maxExp based on the wave number
+        expSlider.maxValue = maxExp; // Update the max value of the exp slider
+    }
+
     private void AutoAttack()
     {
         if (Time.time - lastAttackTime >= attackCooldown)
@@ -111,7 +123,6 @@ public class PlayerController : MonoBehaviour
             Attack();
             lastAttackTime = Time.time; // Update the last attack time
         }
-          
     }
     private void UpgradeWeapon()
     {
@@ -119,6 +130,15 @@ public class PlayerController : MonoBehaviour
         {
             upgradeManager.EnableUIPanel(); // Open the upgrade panel UI
             UpdateExp(-maxExp);
+        }
+    }
+
+    private void die()
+    {
+        if (currentHealth <= 0)
+        {
+            isDead = true; 
+            Time.timeScale = 0f; 
         }
     }
 }

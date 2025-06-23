@@ -1,5 +1,4 @@
 using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,8 +36,7 @@ public class SimpleEnemy : MonoBehaviour
 
     void Update()
     {
-        StateMachine();
-       
+        StateMachine();    
     }
     
     public void StateMachine()
@@ -56,7 +54,6 @@ public class SimpleEnemy : MonoBehaviour
     
     private void ChasePlayer()
     {
-      //  Debug.Log("Chasing the playerGameObject...");
         transform.position = Vector3.MoveTowards(transform.position, playerGameObject.transform.position, moveSpeed * Time.deltaTime);
     }
 
@@ -72,9 +69,7 @@ public class SimpleEnemy : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-       
         currentHealth -= damage;
-       
         
         if (currentHealth <= 0)
         {
@@ -90,8 +85,11 @@ public class SimpleEnemy : MonoBehaviour
         spawnManager.DeactivatePooledObject(gameObject); // Deactivate the enemy object instead of destroying it
         currentHealth = maxHealth; // Reset health for next spawn
         healthBarCanvas.SetActive(false); // Hide health bar canvas when enemy dies
-        spawnManager.SpawnFromPool("ExpCoin", transform.position); // Spawn an experience coin at the enemy's position
-
+        // 30% chance to spawn an experience coin
+        if (Random.value < 0.3f)
+        {
+            spawnManager.SpawnFromPool("ExpCoin", transform.position);
+        }
     }
 
     private void OnTriggerEnter(Collider other)

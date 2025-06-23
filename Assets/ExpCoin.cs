@@ -26,10 +26,10 @@ public class ExpCoin : MonoBehaviour
         if (collision.CompareTag("Player")) // Check if the collider is the player
         {
            playerController.UpdateExp(expValue); // Call the method to update experience in PlayerController
-            Destroy();
+            DisablegameObject();
         }
     }
-    private void Destroy()
+    private void DisablegameObject()
     {
         spawnManager.DeactivatePooledObject(gameObject); // Deactivate the coin object and return it to the pool
         transform.position = Vector3.zero; // Reset position to zero

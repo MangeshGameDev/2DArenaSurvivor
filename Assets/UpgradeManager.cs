@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class UpgradeManager : MonoBehaviour
 {
+    // dependencies
     public static UpgradeManager instance; // Singleton instance
     public PlayerController playerController; // Reference to the PlayerController script
     public GameObject upgradePanelUiGameObject; // Reference to the upgrade panel UI GameObject
@@ -41,15 +42,10 @@ public class UpgradeManager : MonoBehaviour
     {
         upgradePanelUiGameObject.SetActive(false); 
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-      
-    }
     public void BulletUpgrade()
     {
         bulletDamage += bulletDamageUpgradeRate;
+        bulletDamage = Mathf.Clamp(bulletDamage, 5f, 150f); // Ensure bullet damage does not exceed a maximum value
         playerController.attackRange += bulletRangeUpgradeRate ; // Assuming attackRange is the range of the bullets
         DisableUIPanel();
 

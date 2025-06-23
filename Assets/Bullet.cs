@@ -3,17 +3,16 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    private UpgradeManager upgradeManager; // Reference to the UpgradeManager script
+    // dependencies
+    private UpgradeManager upgradeManager; 
+    private SpawnManagerForPlayer spawnManagerForPlayer; 
+    private PlayerController playerController; 
 
-    [Header("Bullet Settings")]
     public float speed = 10f; // Speed of the bullet
     public float lifetime = 5f; // Time before the bullet is destroyed
     public float damage = 50f; // Damage dealt by the bullet
     [HideInInspector] public Vector2 direction; // Direction of the bullet
    
-    private SpawnManagerForPlayer spawnManagerForPlayer; // Reference to the SpawnManager for player
-    private PlayerController playerController; // Reference to the PlayerController
-
     private Vector2 moveTarget; // The position to move towards
     private bool hasTarget = false;
 
