@@ -10,7 +10,9 @@ public class Bullet : MonoBehaviour
 
     public float speed = 10f; // Speed of the bullet
     public float lifetime = 5f; // Time before the bullet is destroyed
+    private float lifetimeTimer; // Timer to track bullet lifetime
     public float damage = 50f; // Damage dealt by the bullet
+    private float currentDamage; // Current damage of the bullet
     [HideInInspector] public Vector2 direction; // Direction of the bullet
    
     private Vector2 moveTarget; // The position to move towards
@@ -22,17 +24,22 @@ public class Bullet : MonoBehaviour
         spawnManagerForPlayer = SpawnManagerForPlayer.Instance; // Get the SpawnManagerForPlayer instance
         playerController = PlayerController.instance; // Get the PlayerController instance
     }
+    private void Start()
+    {  
+        currentDamage = damage; // Initialize current damage
+    }
 
     private void OnEnable()
     {
-       
+        currentDamage = upgradeManager.bulletDamage; // Update bullet damage from UpgradeManager
         SeekAndSetTarget();
+        lifetimeTimer = 0f;
     }
 
     private void Update()
     {
         ShootWhenGotTarget();
-        damage = upgradeManager.bulletDamage; // Update bullet damage from UpgradeManager
+        DisableOverTime(); 
     }
 
     private void ShootWhenGotTarget()
@@ -42,34 +49,16 @@ public class Bullet : MonoBehaviour
             // Move towards the target position
             transform.position = Vector2.MoveTowards(transform.position, moveTarget, speed * Time.deltaTime);
 
-            // Optionally, deactivate if reached target (for non-random movement)
-            if ((Vector2)transform.position == moveTarget)
+           // Optionally, deactivate if reached target (for non-random movement)
+           if ((Vector2)transform.position == moveTarget)
             {
                 spawnManagerForPlayer.DeactivatePooledObject(gameObject);
-                gameObject.SetActive(false);
+                
             }
+            
         }
-        else
-        {
-            // Move in a random direction if no target
-            transform.position += (Vector3)direction * speed * Time.deltaTime;
-        }
+       
     }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            SimpleEnemy enemy = collision.gameObject.GetComponent<SimpleEnemy>();
-            if (enemy != null)
-            {
-                enemy.TakeDamage(damage);
-            }
-            spawnManagerForPlayer.DeactivatePooledObject(gameObject);
-            gameObject.SetActive(false);
-        }
-    }
-
     public void SeekAndSetTarget()
     {
         hasTarget = false;
@@ -108,7 +97,30 @@ public class Bullet : MonoBehaviour
         {
             // No target found, deactivate bullet immediately
             spawnManagerForPlayer.DeactivatePooledObject(gameObject);
-            gameObject.SetActive(false);
+           
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            SimpleEnemy enemy = collision.gameObject.GetComponent<SimpleEnemy>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(currentDamage);
+            }
+            spawnManagerForPlayer.DeactivatePooledObject(gameObject);
+
+        }
+    }
+
+    private void DisableOverTime()
+    { 
+        lifetimeTimer += Time.deltaTime; // Increment the lifetime timer
+        if (lifetimeTimer > lifetime)
+        {
+            spawnManagerForPlayer.DeactivatePooledObject(gameObject);
+
         }
     }
 

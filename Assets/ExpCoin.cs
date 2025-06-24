@@ -2,36 +2,33 @@ using UnityEngine;
 
 public class ExpCoin : MonoBehaviour
 {
-    public float expValue = 10f; // The amount of experience this coin gives when collected
+    public float expValue = 10f; 
     private SpawnManager spawnManager;
-    private PlayerController playerController; // Reference to the PlayerController script  
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private PlayerController playerController; 
+    
+
     void Start()
     {
-        playerController = GameObject.FindFirstObjectByType<PlayerController>(); // Find the PlayerController in the scene
+        playerController = PlayerController.instance; // Find the PlayerController in the scene
         spawnManager = SpawnManager.Instance; // Find the SpawnManager in the scene
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(playerController.currentExp >= playerController.maxExp) // Check if the player has reached max experience
+        if(playerController.currentExp >= playerController.maxExp) 
         {
             return; // If so, do nothing
         }
-        if (collision.CompareTag("Player")) // Check if the collider is the player
+        if (collision.CompareTag("Player")) 
         {
-           playerController.UpdateExp(expValue); // Call the method to update experience in PlayerController
+           playerController.UpdateExp(expValue); 
             DisablegameObject();
         }
     }
+
     private void DisablegameObject()
     {
-        spawnManager.DeactivatePooledObject(gameObject); // Deactivate the coin object and return it to the pool
-        transform.position = Vector3.zero; // Reset position to zero
+        spawnManager.DeactivatePooledObject(gameObject); 
+        
     }
 }

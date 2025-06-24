@@ -8,6 +8,7 @@ public class CircleAttack : MonoBehaviour
 
     private float cooldownTimer = 0f;
     private CircleCollider2D circleCollider;
+    private float attackRadius;
 
     void Awake()
     {
@@ -17,14 +18,28 @@ public class CircleAttack : MonoBehaviour
             Debug.LogError("CircleAttack requires a CircleCollider2D component.");
         }
     }
+    void Start()
+    {
+        // Initialize the cooldown timer
+        cooldownTimer = attackCooldown;
+    }
 
     void Update()
     {
-        cooldownTimer -= Time.deltaTime;
-        if (cooldownTimer <= 0f)
+        AutoAttack();
+
+    }
+
+    private void AutoAttack()
+    {
+        if (PlayerController.instance.isDead == false)
         {
-            PerformAttack();
-            cooldownTimer = attackCooldown;
+            cooldownTimer -= Time.deltaTime;
+            if (cooldownTimer <= 0f)
+            {
+                PerformAttack();
+                cooldownTimer = attackCooldown;
+            }
         }
     }
 
@@ -50,10 +65,10 @@ public class CircleAttack : MonoBehaviour
         transform.localScale += new Vector3(amount, amount, 0f);
     }
 
-    // Changes the attack power
-    public void ChangeAttackPower(float newPower)
+   
+    public void IncreaseAttackPower(float AdjustPower)
     {
-        attackPower += newPower;
+        attackPower += AdjustPower;
     }
 
     private void OnDrawGizmosSelected()

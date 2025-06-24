@@ -7,13 +7,14 @@ public class SimpleEnemy : MonoBehaviour
     
     private GameObject playerGameObject;
     private PlayerController playerController;
-    [Header("Enemy Settings")]
-    private float moveSpeed = 1f;
-    private float attackRange = 1f;
-    private float attackCooldown = 1f;
-    private float attackpower = 10f;
-    [Header("Enemy Health Settings")]
-    private float maxHealth = 100f;
+    private SimpleEnemyValues simpleEnemyValues; // Reference to the SimpleEnemyValues scriptable object
+    // Enemy Settings
+    private float moveSpeed ;
+    private float attackRange ;
+    private float attackCooldown;
+    private float attackpower ;
+    // Health Settings
+    private float maxHealth;
     public float currentHealth;
     public GameObject healthBarCanvas;
     public Slider healthBarSlider; // Slider to represent health visually
@@ -24,14 +25,38 @@ public class SimpleEnemy : MonoBehaviour
     private WaveSystem waveSystem; // Reference to the WaveSystem
     private void Awake()
     {
+        InitializeEnemy();
+    }
+
+    private void InitializeEnemy()
+    {
         // Initialize health and health bar
         currentHealth = maxHealth;
         healthBarSlider.maxValue = maxHealth;
-        healthBarCanvas.SetActive(false); // Hide health bar canvas initially
+        // Hide health bar canvas initially
+        healthBarCanvas.SetActive(false); 
         playerGameObject = GameObject.FindGameObjectWithTag("Player");
         playerController = playerGameObject.GetComponent<PlayerController>();
-        spawnManager = SpawnManager.Instance; // Get the SpawnManager instance
+        // Get the SpawnManager instance
+        spawnManager = SpawnManager.Instance;
         waveSystem = WaveSystem.Instance;
+        
+        simpleEnemyValues = GetComponent<SimpleEnemyValues>();
+    }
+    private void Start()
+    {
+        AssignValuesFromConfig();
+    }
+
+    private void AssignValuesFromConfig()
+    {
+        moveSpeed = simpleEnemyValues.moveSpeed; // Get move speed from the SimpleEnemyValues scriptable object
+        attackRange = simpleEnemyValues.attackRange; // Get attack range from the SimpleEnemyValues scriptable object
+        attackCooldown = simpleEnemyValues.attackCooldown; // Get attack cooldown from the SimpleEnemyValues scriptable object
+        attackpower = simpleEnemyValues.attackpower; // Get attack power from the SimpleEnemyValues scriptable object
+        maxHealth = simpleEnemyValues.maxHealth; // Get max health from the SimpleEnemyValues scriptable object
+        currentHealth = maxHealth; // Initialize current health
+        healthBarSlider.maxValue = maxHealth;
     }
 
     void Update()
@@ -88,16 +113,7 @@ public class SimpleEnemy : MonoBehaviour
         // 30% chance to spawn an experience coin
         if (Random.value < 0.3f)
         {
-            spawnManager.SpawnFromPool("ExpCoin", transform.position);
+            spawnManager.SpawnFromPool("ExpCoin", this.transform.position);
         }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Bullet"))
-        {
-            Debug.Log(other.name + " hit the enemy!");
-        }
-        
     }
 }

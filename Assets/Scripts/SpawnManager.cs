@@ -63,14 +63,22 @@ public class SpawnManager : MonoBehaviour
             return;
         }
         GameObject objectToSpawn = poolDictionary[tag].Dequeue();// Get an object from the pool
-        objectToSpawn.SetActive(true);
         objectToSpawn.transform.position = position;
         objectToSpawn.transform.rotation = Quaternion.identity;
-        poolDictionary[tag].Enqueue(objectToSpawn); // Re-add the object to the pool
+        objectToSpawn.SetActive(true);
+
     }
 
     public void DeactivatePooledObject(GameObject obj)
     {
+        if (!poolDictionary.ContainsKey(obj.tag))
+        {
+            Debug.LogWarning($"No pool with tag {obj.tag} exists.");
+            return;
+        }
+        poolDictionary[obj.tag].Enqueue(obj);
         obj.SetActive(false);
+        poolDictionary[obj.tag].Enqueue(obj); // Re-add the object to the pool
+       
     }
 }

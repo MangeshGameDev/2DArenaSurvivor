@@ -5,11 +5,11 @@ public class PlayerController : MonoBehaviour
 {  
     public static PlayerController instance;
     // Player Movement Settings
-    private float moveSpeed = 5f;
-    private float sprintSpeed = 10f;
+   [SerializeField] private float moveSpeed = 5f;
+   [SerializeField] private float sprintSpeed = 10f;
 
    //Player Health Settings
-    private float maxHealth = 100f;
+  [SerializeField]  private float maxHealth = 100f;
     public float currentHealth;
     public Slider playerSlider;
 
@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
 
 
     //"Player Attack Settings"
-    public float attackRange = 5f;
+    public float attackRange = 3f;
     public LayerMask enemyLayer;
     private float attackCooldown = 0.5f;
     private float lastAttackTime = -Mathf.Infinity;
@@ -29,8 +29,9 @@ public class PlayerController : MonoBehaviour
     public SpawnManagerForPlayer spawnManagerForPlayer; 
     public UpgradeManager upgradeManager;
 
-    // bool to check if the player is dead
-   [HideInInspector] public bool isDead = false;
+    // References to components
+    private Rigidbody2D rb; 
+    [HideInInspector] public bool isDead = false;
     private void Awake()
     {
        Time.timeScale = 1f; // Ensure the game is running at normal speed
@@ -54,8 +55,8 @@ public class PlayerController : MonoBehaviour
         // Initialize experience and experience bar
         expSlider.maxValue = maxExp;
         expSlider.value = currentExp;
-        // Initialize references to other managers
-
+        // Get the Rigidbody2D component
+        rb = GetComponent<Rigidbody2D>();
         // boolean to check if the player is dead
         isDead = false;
     }
@@ -77,7 +78,7 @@ public class PlayerController : MonoBehaviour
         movement.Normalize(); // Normalize to prevent faster diagonal movement
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            transform.Translate(movement * sprintSpeed * Time.deltaTime);
+            rb.MovePosition(movement * sprintSpeed * Time.deltaTime);
         }
         else
         {
@@ -87,7 +88,11 @@ public class PlayerController : MonoBehaviour
 
     public void Attack()
     {
-        spawnManagerForPlayer.SpawnFromPool("Bullet", transform.position); // Spawn a bullet from the pools
+        if(WaveSystem.Instance.enemyCount >= 1)
+        {
+            spawnManagerForPlayer.SpawnFromPool("Bullet", transform.position); // Spawn a bullet from the pools
+
+        }
     }
 
     public void UpdateHealth(float amount)

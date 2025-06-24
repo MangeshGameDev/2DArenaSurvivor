@@ -258,9 +258,9 @@ RectTransform:
   - {fileID: 1316597064}
   m_Father: {fileID: 344908397}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 3103.4902, y: -1103.9288}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &33248537
@@ -965,7 +965,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &344908397
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1632,9 +1632,9 @@ RectTransform:
   - {fileID: 463369771}
   m_Father: {fileID: 344908397}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1922.0942, y: -1103.9288}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &943636249
@@ -2319,7 +2319,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afa83d00ae6395d428e8bc1ffb82778e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnManager: {fileID: 1205156727}
   playerController: {fileID: 1688093699}
   waveNumber: 0
   enemiesPerWave: 5
@@ -2359,9 +2358,9 @@ RectTransform:
   - {fileID: 2102951439}
   m_Father: {fileID: 344908397}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 740.69806, y: -1103.9288}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1316597063
@@ -3707,12 +3706,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d94cd80b765da1d4c9b9b7b65e9d6ca5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 5
+  sprintSpeed: 10
+  maxHealth: 100
   currentHealth: 0
   playerSlider: {fileID: 78637309}
   maxExp: 100
   currentExp: 0
   expSlider: {fileID: 1008060304}
-  attackRange: 5
+  attackRange: 3
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -4564,7 +4566,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Restore Full Health of Player
+  m_text: 'Restore Random Amount of Health '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4700,7 +4702,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Restore Full Health
+  m_text: Restore  Health
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5033,7 +5035,7 @@ MonoBehaviour:
   playerController: {fileID: 1688093699}
   upgradePanelUiGameObject: {fileID: 344908396}
   bulletDamage: 50
-  bulletDamageUpgradeRate: 5
+  bulletDamageUpgradeRate: 50
   bulletRangeUpgradeRate: 0.25
   bulletDamageText: {fileID: 1450274645}
   bulletRangeText: {fileID: 1882932052}

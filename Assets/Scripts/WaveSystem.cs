@@ -4,7 +4,7 @@ using System.Collections;
 public class WaveSystem : MonoBehaviour
 {
     public static WaveSystem Instance;
-    public SpawnManager spawnManager;
+    private SpawnManager spawnManager;
     public PlayerController playerController; 
 
     public int waveNumber = 0;
@@ -31,7 +31,13 @@ public class WaveSystem : MonoBehaviour
     void Start()
     {
         spawnManager = GetComponent<SpawnManager>();
-        StartNextWave();
+        if(spawnManager == null)
+        {
+            Debug.LogError("SpawnManager not found on WaveSystem. Please attach a SpawnManager component.");
+            return;
+        }
+        
+        if (playerController.isDead == false) { StartNextWave(); }
     }
 
     void Update()

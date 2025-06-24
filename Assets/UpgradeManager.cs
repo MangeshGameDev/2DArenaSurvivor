@@ -18,8 +18,7 @@ public class UpgradeManager : MonoBehaviour
     public TextMeshProUGUI bulletDamageText;
     public TextMeshProUGUI bulletRangeText;
 
-    // Header("Heal Upgrade Settings")]
-    private float healUpgradeRate = 100f; // Cost to upgrade the heal
+    
 
     [Header("Cricle Upgrade Settings")]
     public CircleAttack circleAttack; // Reference to the CircleAttack component
@@ -36,6 +35,7 @@ public class UpgradeManager : MonoBehaviour
         {
             instance = this; // Set the singleton instance
         }
+
        
     }
     void Start()
@@ -47,21 +47,24 @@ public class UpgradeManager : MonoBehaviour
         bulletDamage += bulletDamageUpgradeRate;
         bulletDamage = Mathf.Clamp(bulletDamage, 5f, 150f); // Ensure bullet damage does not exceed a maximum value
         playerController.attackRange += bulletRangeUpgradeRate ; // Assuming attackRange is the range of the bullets
+        playerController.attackRange = Mathf.Clamp(playerController.attackRange, 1f, 8f); // Ensure attack range does not exceed a maximum value
         DisableUIPanel();
 
 
     }
     public void HealUpgrade()
     {
-        playerController.UpdateHealth(healUpgradeRate);
+        float healAmount = Random.Range(30,70); // Amount to heal
+        playerController.UpdateHealth(healAmount);
         DisableUIPanel();
     }
     public void CircleUpgrade()
     {
         if (circleAttack != null)
         {
-            circleAttack.IncreaseVisualScale(circleRangeUpgradeRate); // Increase the visual scale of the circle
-            circleAttack.ChangeAttackPower(circleDamageUpgradeRate); // Increase the actual attack range
+            circleAttack.IncreaseVisualScale(circleRangeUpgradeRate); 
+            circleAttack.IncreaseAttackPower(circleDamageUpgradeRate); // Increase the actual attack range
+            circleAttack.attackPower = Mathf.Clamp(circleAttack.attackPower + circleDamageUpgradeRate, 1f, 35);
         }
         DisableUIPanel();
     }

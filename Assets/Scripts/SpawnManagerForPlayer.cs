@@ -49,12 +49,6 @@ public class SpawnManagerForPlayer : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-       
-    }
-
     public void SpawnFromPool(string tag, Vector2 position )
     {
         if (!poolDictionary.ContainsKey(tag))
@@ -66,10 +60,18 @@ public class SpawnManagerForPlayer : MonoBehaviour
         objectToSpawn.SetActive(true);
         objectToSpawn.transform.position = position;
         objectToSpawn.transform.rotation = Quaternion.identity;
-        poolDictionary[tag].Enqueue(objectToSpawn); // Re-add the object to the pool
+        
+
     }
     public void DeactivatePooledObject(GameObject obj)
     {
+        if (!poolDictionary.ContainsKey(obj.tag))
+        {
+            Debug.LogWarning($"No pool with tag {obj.tag} exists.");
+            return;
+        }
+        poolDictionary[obj.tag].Enqueue(obj); // Re-enqueue the object for future use
         obj.SetActive(false);
+        
     }
 }
