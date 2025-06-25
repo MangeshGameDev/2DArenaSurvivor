@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
     public static PlayerController instance;
     // Player Movement Settings
    [SerializeField] private float moveSpeed = 5f;
-   [SerializeField] private float sprintSpeed = 10f;
+  
 
    //Player Health Settings
   [SerializeField]  private float maxHealth = 100f;
@@ -74,16 +74,9 @@ public class PlayerController : MonoBehaviour
     {
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
-        Vector3 movement = new Vector3(moveHorizontal, moveVertical, 0.0f);
+        Vector3 movement = new Vector3(moveHorizontal, moveVertical, 0);
         movement.Normalize(); // Normalize to prevent faster diagonal movement
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            rb.MovePosition(movement * sprintSpeed * Time.deltaTime);
-        }
-        else
-        {
-            transform.Translate(movement * moveSpeed * Time.deltaTime);
-        }
+        rb.linearVelocity = movement * moveSpeed; // Set the velocity for movement
     }
 
     public void Attack()

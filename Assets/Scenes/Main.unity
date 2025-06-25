@@ -3707,7 +3707,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  sprintSpeed: 10
   maxHealth: 100
   currentHealth: 0
   playerSlider: {fileID: 78637309}
@@ -3744,7 +3743,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
@@ -5035,7 +5034,7 @@ MonoBehaviour:
   playerController: {fileID: 1688093699}
   upgradePanelUiGameObject: {fileID: 344908396}
   bulletDamage: 50
-  bulletDamageUpgradeRate: 50
+  bulletDamageUpgradeRate: 5
   bulletRangeUpgradeRate: 0.25
   bulletDamageText: {fileID: 1450274645}
   bulletRangeText: {fileID: 1882932052}

@@ -60,18 +60,11 @@ public class SpawnManagerForPlayer : MonoBehaviour
         objectToSpawn.SetActive(true);
         objectToSpawn.transform.position = position;
         objectToSpawn.transform.rotation = Quaternion.identity;
-        
+        poolDictionary[tag].Enqueue(objectToSpawn); // Re-enqueue the object to the pool for future use
 
     }
     public void DeactivatePooledObject(GameObject obj)
-    {
-        if (!poolDictionary.ContainsKey(obj.tag))
-        {
-            Debug.LogWarning($"No pool with tag {obj.tag} exists.");
-            return;
-        }
-        poolDictionary[obj.tag].Enqueue(obj); // Re-enqueue the object for future use
+    { 
         obj.SetActive(false);
-        
     }
 }

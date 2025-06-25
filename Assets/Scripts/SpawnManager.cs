@@ -78,7 +78,7 @@ public class SpawnManager : MonoBehaviour
         }
         poolDictionary[obj.tag].Enqueue(obj);
         obj.SetActive(false);
-        poolDictionary[obj.tag].Enqueue(obj); // Re-add the object to the pool
+       
        
     }
 }
