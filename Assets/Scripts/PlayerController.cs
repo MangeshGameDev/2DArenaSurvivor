@@ -72,11 +72,20 @@ public class PlayerController : MonoBehaviour
 
     public void Movement()
     {
+        
+       
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
         Vector3 movement = new Vector3(moveHorizontal, moveVertical, 0);
         movement.Normalize(); // Normalize to prevent faster diagonal movement
-        rb.linearVelocity = movement * moveSpeed; // Set the velocity for movement
+        if (movement != Vector3.zero)
+        {
+            rb.linearVelocity = movement * moveSpeed; // Set the velocity for movement
+        }
+        else if (movement == Vector3.zero)
+        {
+            rb.linearVelocity = Vector3.zero; // Stop the player if no input is detected
+        }
     }
 
     public void Attack()
