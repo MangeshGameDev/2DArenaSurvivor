@@ -32,7 +32,7 @@ public class Bullet : MonoBehaviour
     private void OnEnable()
     {
         currentDamage = upgradeManager.bulletDamage; // Update bullet damage from UpgradeManager
-        SeekAndSetTarget();
+     //   SeekAndSetTarget();
         lifetimeTimer = 0f;
     }
 
@@ -44,6 +44,7 @@ public class Bullet : MonoBehaviour
 
     private void ShootWhenGotTarget()
     {
+        SeekAndSetTarget(); // Ensure we have a target
         if (hasTarget)
         {
             // Move towards the target position
@@ -51,54 +52,53 @@ public class Bullet : MonoBehaviour
 
            // Optionally, deactivate if reached target (for non-random movement)
            if ((Vector2)transform.position == moveTarget)
-            {
+           {
                 spawnManagerForPlayer.DeactivatePooledObject(gameObject);
                 
-            }
+           }
             
         }
        
     }
     public void SeekAndSetTarget()
     {
-        hasTarget = false;
-        if (playerController == null)
+        if(WaveSystem.Instance.enemyCount > 0)
         {
-            spawnManagerForPlayer.DeactivatePooledObject(gameObject);
-            gameObject.SetActive(false);
-            return;
-        }
-
-        Vector2 currentPos = transform.position;
-        float attackRange = playerController.attackRange;
-        LayerMask enemyLayer = playerController.enemyLayer;
-
-        Collider2D[] hits = Physics2D.OverlapCircleAll(currentPos, attackRange, enemyLayer);
-
-        GameObject nearest = null;
-        float minDist = Mathf.Infinity;
-
-        foreach (var hit in hits)
-        {
-            float dist = Vector2.Distance(currentPos, hit.transform.position);
-            if (dist < minDist)
+            hasTarget = false;
+            if (playerController == null)
             {
-                minDist = dist;
-                nearest = hit.gameObject;
+                spawnManagerForPlayer.DeactivatePooledObject(gameObject);
+                gameObject.SetActive(false);
+                return;
+            }
+
+            Vector2 currentPos = transform.position;
+            float attackRange = playerController.attackRange;
+            LayerMask enemyLayer = playerController.enemyLayer;
+
+            Collider2D[] hits = Physics2D.OverlapCircleAll(currentPos, attackRange, enemyLayer);
+
+            GameObject nearest = null;
+            float minDist = Mathf.Infinity;
+
+            foreach (var hit in hits)
+            {
+                float dist = Vector2.Distance(currentPos, hit.transform.position);
+                if (dist < minDist)
+                {
+                    minDist = dist;
+                    nearest = hit.gameObject;
+                }
+            }
+
+            if (nearest != null)
+            {
+                moveTarget = nearest.transform.position;
+                hasTarget = true;
             }
         }
-
-        if (nearest != null)
-        {
-            moveTarget = nearest.transform.position;
-            hasTarget = true;
-        }
-        else
-        {
-            // No target found, deactivate bullet immediately
-            spawnManagerForPlayer.DeactivatePooledObject(gameObject);
-           
-        }
+       
+       
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

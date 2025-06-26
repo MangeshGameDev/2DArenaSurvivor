@@ -19,7 +19,7 @@ public class ExpCoin : MonoBehaviour
         {
             return; // If so, do nothing
         }
-        if (collision.CompareTag("Player")) 
+        if (collision.CompareTag("Player") && collision is CapsuleCollider2D)
         {
            playerController.UpdateExp(expValue); 
             DisablegameObject();

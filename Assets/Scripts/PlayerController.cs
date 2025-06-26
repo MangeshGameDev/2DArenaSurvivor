@@ -215,12 +215,6 @@ public class PlayerController : MonoBehaviour
             EnemyInRange = false;
         }
     }
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-           // EnemyInRange = false; // Set the flag to false when no enemies are in range
-        }
-    }
+  
 
 }

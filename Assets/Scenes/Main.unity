@@ -2209,7 +2209,7 @@ MonoBehaviour:
   playerController: {fileID: 1688093699}
   waveNumber: 0
   enemiesPerWave: 5
-  timeBetweenWaves: 5
+  timeBetweenWaves: 1
   spawnDelay: 0.3
   enemyCount: 0
 --- !u!1 &1275692060
@@ -3541,7 +3541,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -4852,6 +4852,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2536215463795506212, guid: 27a9e82405e46b24f8ab9865508851d1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3588248698067850246, guid: 27a9e82405e46b24f8ab9865508851d1, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3588248698067850246, guid: 27a9e82405e46b24f8ab9865508851d1, type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6092443923053750110, guid: 27a9e82405e46b24f8ab9865508851d1, type: 3}
