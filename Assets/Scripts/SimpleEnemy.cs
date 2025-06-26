@@ -23,6 +23,13 @@ public class SimpleEnemy : MonoBehaviour
 
     private SpawnManager spawnManager; // Reference to the SpawnManager
     private WaveSystem waveSystem; // Reference to the WaveSystem
+
+    // Animator component for animations
+    private Animator animator;
+    public AnimationClip walkAnimation; // Walk animation clip
+    public AnimationClip attackAnimation; // Attack animation clip
+    private Transform sprite;
+   
     private void Awake()
     {
         InitializeEnemy();
@@ -45,7 +52,11 @@ public class SimpleEnemy : MonoBehaviour
     }
     private void Start()
     {
+
         AssignValuesFromConfig();
+        animator = GetComponentInChildren<Animator>(); // Get the Animator component from the child GameObject
+        sprite = GetComponentInChildren<Transform>(); // Get the sprite GameObject
+        healthBarCanvas.SetActive(false);
     }
 
     private void AssignValuesFromConfig()
@@ -80,6 +91,7 @@ public class SimpleEnemy : MonoBehaviour
     private void ChasePlayer()
     {
         transform.position = Vector3.MoveTowards(transform.position, playerGameObject.transform.position, moveSpeed * Time.deltaTime);
+        AnimationState(1); // Play walk animation
     }
 
     private void AttackPlayer()
@@ -90,6 +102,7 @@ public class SimpleEnemy : MonoBehaviour
             lastAttackTime = Time.time;
           //  Debug.Log("Enemy attacked the player!");
         }
+        AnimationState(2); // Play attack animation
     }
 
     public void TakeDamage(float damage)
@@ -110,10 +123,40 @@ public class SimpleEnemy : MonoBehaviour
         spawnManager.DeactivatePooledObject(gameObject); // Deactivate the enemy object instead of destroying it
         currentHealth = maxHealth; // Reset health for next spawn
         healthBarCanvas.SetActive(false); // Hide health bar canvas when enemy dies
-        // 30% chance to spawn an experience coin
-        if (Random.value < 0.3f)
+        // 50% chance to spawn an experience coin
+        if (Random.value < 0.5f)
         {
             spawnManager.SpawnFromPool("ExpCoin", this.transform.position);
+        }
+       
+    }
+
+    private  void AnimationState( int AnimationIndex)
+    {
+        // 1 = Walk, 2 = Attack
+        if ( AnimationIndex == 1)
+        {
+           animator.Play(walkAnimation.name);
+
+        }
+        if (AnimationIndex == 2)
+        {
+            animator.Play(attackAnimation.name);
+        }
+       FacePlayer(); // Face the player while animating
+    }
+    private void FacePlayer()
+    {
+        Vector3 direction = playerGameObject.transform.position - transform.position;
+        if (direction.x > 0)
+        {
+            // Face right
+            sprite.localRotation = Quaternion.Euler(0, 0, 0);
+        }
+        else if (direction.x < 0)
+        {
+            // Face left (flip 180 on Y)
+            sprite.localRotation = Quaternion.Euler(0, 180, 0);
         }
     }
 }

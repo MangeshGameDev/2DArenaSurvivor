@@ -25,7 +25,7 @@ public class Bullet : MonoBehaviour
         playerController = PlayerController.instance; // Get the PlayerController instance
     }
     private void Start()
-    {  
+    {  damage = upgradeManager.bulletDamage; // Get initial bullet damage from UpgradeManager
         currentDamage = damage; // Initialize current damage
     }
 

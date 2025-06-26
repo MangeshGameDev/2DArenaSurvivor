@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
 
     //"Player Attack Settings"
     public float attackRange = 3f;
+    private CircleCollider2D CircleCollider2D; // CircleCollider2D for attack range
     public LayerMask enemyLayer;
     private float attackCooldown = 0.5f;
     private float lastAttackTime = -Mathf.Infinity;
@@ -32,6 +33,14 @@ public class PlayerController : MonoBehaviour
     // References to components
     private Rigidbody2D rb; 
     [HideInInspector] public bool isDead = false;
+    private bool EnemyInRange = false; // Check if an enemy is in range for attack
+
+    // 
+    public Transform sprite; // Reference to the sprite transform for animations
+    private Animator animator; // Animator component for animations
+    public AnimationClip walkAnimation; // Walk animation clip
+    public AnimationClip attackAnimation; // Attack animation clip
+    public AnimationClip idleAnimation;
     private void Awake()
     {
        Time.timeScale = 1f; // Ensure the game is running at normal speed
@@ -57,8 +66,13 @@ public class PlayerController : MonoBehaviour
         expSlider.value = currentExp;
         // Get the Rigidbody2D component
         rb = GetComponent<Rigidbody2D>();
+        // Get the CircleCollider2D component for attack range
+        CircleCollider2D = GetComponent<CircleCollider2D>();
+        CircleCollider2D.radius = attackRange; // Set the radius of the attack range collider
         // boolean to check if the player is dead
         isDead = false;
+        // Get the Animator component for animations
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void Update()
@@ -69,6 +83,10 @@ public class PlayerController : MonoBehaviour
         die(); 
 
     }
+    private void FixedUpdate()
+    {
+      
+    }
 
     public void Movement()
     {
@@ -78,20 +96,31 @@ public class PlayerController : MonoBehaviour
         movement.Normalize(); // Normalize to prevent faster diagonal movement
         if (movement != Vector3.zero)
         {
+            AnimationState(1); // Play walk animation when moving
             rb.linearVelocity = movement * moveSpeed; // Set the velocity for movement
         }
-        else if (movement == Vector3.zero)
+        else if (movement == Vector3.zero )
         {
+            if(EnemyInRange == false)
+            {
+                AnimationState(3);
+            }    
+            else
+            {
+                AnimationState(2);
+            }
             rb.linearVelocity = Vector3.zero; // Stop the player if no input is detected
         }
+        transform.position = new Vector3( Mathf.Clamp(transform.position.x, -8f, 8f), Mathf.Clamp(transform.position.y, -4.5f, 4.5f), transform.position.z); // Clamp the player's position within the screen bounds
     }
 
     public void Attack()
     {
-        if(WaveSystem.Instance.enemyCount >= 1)
+        if(WaveSystem.Instance.enemyCount >= 1 && EnemyInRange)
         {
+            AnimationState(2); // Play attack animation
             spawnManagerForPlayer.SpawnFromPool("Bullet", transform.position); // Spawn a bullet from the pools
-
+           
         }
     }
 
@@ -146,4 +175,52 @@ public class PlayerController : MonoBehaviour
             Time.timeScale = 0f; 
         }
     }
+
+    private void AnimationState( int AnimationIndex)
+    {
+        // 1 = Walk Animation, 2 = Attack Animation, 3 = Idle Animation
+        if ( AnimationIndex == 1)
+        {
+            animator.Play(walkAnimation.name); // Play walk animation
+          Input.GetAxis("Horizontal"); // Get horizontal input for movement
+            if (Input.GetAxis("Horizontal") < 0) // If moving left
+            {
+                sprite.localScale = new Vector3(-1, 1, 1); // Flip the sprite to face left
+            }
+            else if (Input.GetAxis("Horizontal") > 0) // If moving right
+            {
+                sprite.localScale = new Vector3(1, 1, 1); // Reset the sprite to face right
+            }
+        }
+        if (AnimationIndex == 2)
+        {
+            animator.Play(attackAnimation.name); // Play attack animation
+        }
+        else if(AnimationIndex != 1&& AnimationIndex!=2)
+        {
+            animator.Play(idleAnimation.name); // Play idle animation
+        }
+    }
+
+  
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            EnemyInRange = true; // Ensure the flag remains true while an enemy is in range
+            
+        }
+        else
+        {
+            EnemyInRange = false;
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+           // EnemyInRange = false; // Set the flag to false when no enemies are in range
+        }
+    }
+
 }
