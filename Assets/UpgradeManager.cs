@@ -49,7 +49,7 @@ public class UpgradeManager : MonoBehaviour
         playerController.attackRange += bulletRangeUpgradeRate ; // Assuming attackRange is the range of the bullets
         playerController.attackRange = Mathf.Clamp(playerController.attackRange, 1f, 8f); // Ensure attack range does not exceed a maximum value
         DisableUIPanel();
-
+        updatePlayerExpLevel(); // Update the player's experience level after upgrading
 
     }
     public void HealUpgrade()
@@ -57,6 +57,7 @@ public class UpgradeManager : MonoBehaviour
         float healAmount = Random.Range(30,70); // Amount to heal
         playerController.UpdateHealth(healAmount);
         DisableUIPanel();
+        playerController.UpdateMaxExp(); // Update the player's experience level after healing
     }
     public void CircleUpgrade()
     {
@@ -67,6 +68,7 @@ public class UpgradeManager : MonoBehaviour
             circleAttack.attackPower = Mathf.Clamp(circleAttack.attackPower + circleDamageUpgradeRate, 1f, 35);
         }
         DisableUIPanel();
+        updatePlayerExpLevel(); // Update the player's experience level after upgrading
     }
     public void EnableUIPanel()
     {
@@ -90,5 +92,9 @@ public class UpgradeManager : MonoBehaviour
     {
        circleDamageText.text = "Damage: " + circleAttack.attackPower.ToString();
        circleRadiusText.text = "Radius: " + circleAttack.transform.localScale.x.ToString(); // Assuming the circle's radius is represented by its scale
+    }
+    private void updatePlayerExpLevel()
+    {
+        playerController.UpdateMaxExp();
     }
 }

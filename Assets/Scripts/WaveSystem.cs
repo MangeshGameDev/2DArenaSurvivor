@@ -58,8 +58,7 @@ public class WaveSystem : MonoBehaviour
         waveNumber++;
         enemyCount = enemiesPerWave + (waveNumber - 1) * 2;
         StartCoroutine(SpawnWaveCoroutine(enemyCount));
-        // update the max experience in PlayerController
-         playerController.UpdateMaxExp();
+        
     }
 
     IEnumerator SpawnWaveCoroutine(int count)

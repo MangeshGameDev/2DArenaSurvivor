@@ -16,9 +16,8 @@ public class PlayerController : MonoBehaviour
     //"Player Exp Settings"
     public float maxExp = 100f;
     public float currentExp = 0f;
-    public Slider expSlider; 
-
-
+    public Slider expSlider;
+    
     //"Player Attack Settings"
     public float attackRange = 3f;
     private CircleCollider2D CircleCollider2D; // CircleCollider2D for attack range
@@ -73,6 +72,8 @@ public class PlayerController : MonoBehaviour
         isDead = false;
         // Get the Animator component for animations
         animator = GetComponentInChildren<Animator>();
+       
+       
     }
 
     private void Update()
@@ -90,28 +91,29 @@ public class PlayerController : MonoBehaviour
 
     public void Movement()
     {
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
+        float moveHorizontal = Input.GetAxisRaw("Horizontal");
+        float moveVertical = Input.GetAxisRaw("Vertical");
         Vector3 movement = new Vector3(moveHorizontal, moveVertical, 0);
         movement.Normalize(); // Normalize to prevent faster diagonal movement
+
         if (movement != Vector3.zero)
         {
             AnimationState(1); // Play walk animation when moving
             rb.linearVelocity = movement * moveSpeed; // Set the velocity for movement
         }
-        else if (movement == Vector3.zero )
+        else
         {
-            if(EnemyInRange == false)
+            if (EnemyInRange == false)
             {
                 AnimationState(3);
-            }    
+            }
             else
             {
                 AnimationState(2);
             }
-            rb.linearVelocity = Vector3.zero; // Stop the player if no input is detected
+            rb.linearVelocity = Vector3.zero; // Instantly stop the player if no input is detected
         }
-        transform.position = new Vector3( Mathf.Clamp(transform.position.x, -8f, 8f), Mathf.Clamp(transform.position.y, -4.5f, 4.5f), transform.position.z); // Clamp the player's position within the screen bounds
+         transform.position = new Vector3 ( Mathf.Clamp(transform.position.x, -8f, 8f),Mathf.Clamp(transform.position.y, -4.5f, 4.5f),transform.position.z ); // Clamp the player's position within the screen bounds
     }
 
     public void Attack()
@@ -146,7 +148,7 @@ public class PlayerController : MonoBehaviour
 
     public void UpdateMaxExp()
     {
-        maxExp += WaveSystem.Instance.waveNumber * 2; // Increase maxExp based on the wave number
+        maxExp += WaveSystem.Instance.waveNumber * 5; // Increase maxExp based on the wave number
         expSlider.maxValue = maxExp; // Update the max value of the exp slider
     }
 
